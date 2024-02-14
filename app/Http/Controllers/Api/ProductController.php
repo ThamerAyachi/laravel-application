@@ -4,21 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Validator;
 
 class ProductController extends Controller
 {
-    public function index($page = 1)
+    public function index(Request $request)
     {
-        $perPage = 10;
-        $offset = ($page - 1) * $perPage;
-
-        $products = Product::skip($offset)->take($perPage)->get();
-        return response()->json([
-            "status" => 200,
-            "data" => $products
-        ], 200);
+        $products = Product::query()->paginate(10, ['*'], 'p');
+        return response()->json($products, 200);
     }
 
     public function store(Request $request)
@@ -26,7 +22,7 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             "name" => 'required|string',
             "stock" => 'required|integer',
-            "size" => "required|in:small,medium,large"
+            "size" => [Rule::in(Product::SIZES)],
         ]);
 
         if ($validator->fails()) {
@@ -36,11 +32,8 @@ class ProductController extends Controller
             ], 422);
         }
 
-        $product = Product::create([
-            "name" => $request->name,
-            "stock" => $request->stock,
-            "size" => $request->size,
-        ]);
+        $product = ProductRepository::create($request->name, $request->stock, $request->size);
+        // $product->user->products;
 
         return response()->json([
             "status" => 201,
@@ -51,15 +44,11 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return response()->json(["message" => "Product not found"], 404);
-        }
+        $product = Product::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
             "name" => 'required|string',
-            "stock" => 'required|integer',
+            "quantity" => 'required|integer',
             "size" => "required|in:small,medium,large"
         ]);
 
@@ -70,9 +59,10 @@ class ProductController extends Controller
             ], 422);
         }
 
-        $product->update([
+        $productRepository = new ProductRepository($product);
+        $productRepository->update([
             "name" => $request->name,
-            "stock" => $request->stock,
+            "quantity" => $request->stock,
             "size" => $request->size,
         ]);
 
