@@ -21,7 +21,7 @@ class CommentFactory extends Factory
         return [
             'username' => fake()->name(),
             'description' => fake()->paragraph(),
-            'article_id' => Article::all()->random()->id,
+            'article_id' => Article::query()->inRandomOrder()->value('id'),
         ];
     }
 }

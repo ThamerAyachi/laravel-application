@@ -15,7 +15,8 @@ class ArticleController extends Controller
     public function index(Request $request)
     {
         $page = $request->input('p', 1);
-        return response()->json(ArticleRepository::paginate(page: $page), 200);
+        $articles = ArticleRepository::paginate(page: $page);
+        return response()->json($articles, 200);
     }
 
 }

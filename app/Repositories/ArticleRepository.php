@@ -43,7 +43,7 @@ class ArticleRepository
     }
 
     /**
-     * @return Article
+     * @return bool
      */
     public function update($attributs = [])
     {
@@ -55,9 +55,7 @@ class ArticleRepository
             $this->article->description = $attributs['description'];
         }
 
-        $this->article->save();
-
-        return $this->article;
+        return $this->article->save();
     }
 
     public static function delete(Article $article)

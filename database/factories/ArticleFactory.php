@@ -21,7 +21,7 @@ class ArticleFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
-            'user_id' => User::all()->random()->id,
+            'user_id' => User::query()->inRandomOrder()->value('id'),
         ];
     }
 }

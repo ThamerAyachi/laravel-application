@@ -51,7 +51,10 @@ class ArticleController extends Controller
         $validated = $request->validated();
         $article = Article::findOrFail($article_id);
         $articleRepository = new ArticleRepository($article);
-        return response()->json($articleRepository->update($validated), 200);
+
+        $articleRepository->update($validated);
+
+        return response()->json($article, 200);
     }
 
     /**

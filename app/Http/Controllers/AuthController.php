@@ -37,7 +37,7 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return $this->createNewToken($token, auth()->user());
+        return $this->tokenResponse($token, auth()->user());
     }
 
     /**
@@ -75,7 +75,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function createNewToken($token, $user)
+    private function tokenResponse($token, $user)
     {
         return response()->json([
             "token" => [
@@ -104,7 +104,7 @@ class AuthController extends Controller
         if (!$token = Auth::guard('api-admin')->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return $this->createNewToken($token, auth()->user());
+        return $this->tokenResponse($token, auth()->user());
     }
 
 

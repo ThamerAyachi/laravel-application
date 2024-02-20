@@ -35,12 +35,15 @@ class ArticleController extends Controller
     public function update(UpdateArticle $request, $article_id)
     {
         $validated = $request->validated();
+        $user = auth()->user();
 
-        $article = auth()->user()->articles()->findOrFail($article_id);
+        $article = $user->articles()->findOrFail($article_id);
 
         $articleRepository = new ArticleRepository($article);
 
-        return response()->json($articleRepository->update($validated), 200);
+        $articleRepository->update($validated);
+
+        return response()->json($article, 200);
     }
 
     /**
@@ -50,7 +53,8 @@ class ArticleController extends Controller
      */
     public function destroy(Request $request, $article_id)
     {
-        $article = auth()->user()->articles()->findOrFail($article_id);
+        $user = auth()->user();
+        $article = $user->articles()->findOrFail($article_id);
         ArticleRepository::delete($article);
         return response()->json();
     }
