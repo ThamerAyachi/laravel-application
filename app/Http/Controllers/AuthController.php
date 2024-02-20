@@ -37,7 +37,7 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return $this->createNewToken($token);
+        return $this->createNewToken($token, auth()->user());
     }
 
     /**
@@ -75,11 +75,15 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function createNewToken($token)
+    protected function createNewToken($token, $user)
     {
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
+            "token" => [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+            ]
+            ,
+            "user" => $user
         ]);
     }
 
@@ -100,7 +104,7 @@ class AuthController extends Controller
         if (!$token = Auth::guard('api-admin')->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return $this->createNewToken($token);
+        return $this->createNewToken($token, auth()->user());
     }
 
 
@@ -121,5 +125,16 @@ class AuthController extends Controller
             'message' => 'User successfully registered',
             'user' => $user
         ], 201);
+    }
+
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function adminProfile()
+    {
+        return response()->json(Auth::guard('api-admin')->user());
     }
 }

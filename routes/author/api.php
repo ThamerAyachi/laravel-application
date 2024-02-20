@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Author\ArticleController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Admin\CommentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,15 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/profile', [AuthController::class, 'userProfile']);
 
-Route::get('/profile', [AuthController::class, 'adminProfile']);
-
-Route::prefix("article")->group(function () {
+Route::prefix('article')->group(function () {
+    Route::post('', [ArticleController::class, 'create']);
     Route::post('{article_id}', [ArticleController::class, 'update']);
     Route::delete('{article_id}', [ArticleController::class, 'destroy']);
-});
-
-Route::prefix("comment")->group(function () {
-    Route::post('{comment_id}', [CommentController::class, 'update']);
-    Route::delete('{comment_id}', [CommentController::class, 'destroy']);
 });

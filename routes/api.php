@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,12 +26,19 @@ Route::prefix('auth')->group(function () {
     Route::prefix('author')->group(function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
-        // Route::get('', [AuthController::class, 'userProfile']);
     });
 
     Route::prefix('admin')->group(function () {
         Route::post('/login', [AuthController::class, 'adminLogin']);
         Route::post('/register', [AuthController::class, 'adminRegister']);
-        // Route::get('', [AuthController::class, 'userProfile']);
     });
+});
+
+Route::prefix('article')->group(function () {
+    Route::get('', [ArticleController::class, 'index']);
+    Route::post('{article_id}/comment', [CommentController::class, 'create']);
+});
+
+Route::prefix('comment')->group(function () {
+    Route::get('{article_id}', [CommentController::class, 'index']);
 });
