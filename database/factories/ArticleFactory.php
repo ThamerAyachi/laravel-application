@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Article;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -22,6 +23,7 @@ class ArticleFactory extends Factory
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
             'user_id' => User::query()->inRandomOrder()->value('id'),
+            'status' => $this->faker->randomElement(Article::STATUSES),
         ];
     }
 }
