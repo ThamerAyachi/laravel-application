@@ -20,8 +20,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/profile', [AuthController::class, 'adminProfile']);
 
 Route::prefix("article")->group(function () {
+    Route::get('', [ArticleController::class, 'index']);
     Route::post('{article_id}', [ArticleController::class, 'update']);
     Route::delete('{article_id}', [ArticleController::class, 'destroy']);
+    Route::post('{article_id}/publish', [ArticleController::class, 'publish']);
+    Route::post('{article_id}/unpublish', [ArticleController::class, 'unpublish']);
 });
 
 Route::prefix("comment")->group(function () {

@@ -9,6 +9,14 @@ class Article extends Model
 {
     use HasFactory;
 
+    const DRAFT = 0;
+    const PUBLISHED = 1;
+    const UNPUBLISHED = 2;
+
+    const STATUSES = [self::DRAFT, self::PUBLISHED, self::UNPUBLISHED];
+
+    const DEFAULT_STATUS = self::DRAFT;
+
     protected $table = "articles";
 
     public function user()

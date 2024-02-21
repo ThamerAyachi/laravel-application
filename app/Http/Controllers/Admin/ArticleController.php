@@ -68,4 +68,30 @@ class ArticleController extends Controller
         ArticleRepository::delete($article);
         return response()->json();
     }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function publish(Request $request, $article_id)
+    {
+        $article = Article::findOrFail($article_id);
+        $articleRepository = new ArticleRepository($article);
+        $articleRepository->publish();
+        return response()->json($article, 200);
+    }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unpublish(Request $request, $article_id)
+    {
+        $article = Article::findOrFail($article_id);
+        $articleRepository = new ArticleRepository($article);
+        $articleRepository->unpublish();
+        return response()->json($article, 200);
+    }
 }

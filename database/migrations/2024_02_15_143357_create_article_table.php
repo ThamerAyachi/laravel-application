@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Article;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,6 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->string("title");
             $table->longText("description");
+            $table->tinyInteger('status')->default(Article::DEFAULT_STATUS);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

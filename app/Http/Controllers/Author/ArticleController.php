@@ -15,6 +15,19 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    public function index(Request $request)
+    {
+        $page = $request->input('p', 1);
+        $user = auth()->user();
+        $articles = ArticleRepository::paginateByAuthor($user, 10, $page);
+        return response()->json($articles, 200);
+    }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(CreateArticle $request)
     {
         $validated = $request->validated();
@@ -59,4 +72,31 @@ class ArticleController extends Controller
         return response()->json();
     }
 
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function publish(Request $request, $article_id)
+    {
+        $user = auth()->user();
+        $article = $user->articles()->findOrFail($article_id);
+        $articleRepository = new ArticleRepository($article);
+        $articleRepository->publish();
+        return response()->json($article, 200);
+    }
+
+    /**
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unpublish(Request $request, $article_id)
+    {
+        $user = auth()->user();
+        $article = $user->articles()->findOrFail($article_id);
+        $articleRepository = new ArticleRepository($article);
+        $articleRepository->unpublish();
+        return response()->json($article, 200);
+    }
 }

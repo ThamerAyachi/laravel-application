@@ -18,7 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/profile', [AuthController::class, 'userProfile']);
 
 Route::prefix('article')->group(function () {
+    Route::get('', [ArticleController::class, 'index']);
     Route::post('', [ArticleController::class, 'create']);
     Route::post('{article_id}', [ArticleController::class, 'update']);
     Route::delete('{article_id}', [ArticleController::class, 'destroy']);
+    Route::post('{article_id}/publish', [ArticleController::class, 'publish']);
+    Route::post('{article_id}/unpublish', [ArticleController::class, 'unpublish']);
 });
